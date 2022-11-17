@@ -1,103 +1,22 @@
-import { useState } from "react";
-import "./style.css";
+import "./styles.css";
+import EnhancedComp from "../EnhancedComp";
+import { useEffect } from "react";
 
-export default function App() {
-  const [input, setInput] = useState({
-    username: "",
-    pwd: ""
-  });
-  const [usernameErr, setUserErr] = useState("");
-  const [pwdErr, setPwdErr] = useState("");
-  const [submit, setSubmit] = useState(false);
-  /* Credentials */
-
-  const uname = "VinothM2310";
-  const password = "Madhavan";
-  /* Controlled Cmp */
-
-  const changeHandler = (e) => {
-    const username = e.target.name;
-    const pwd = e.target.value;
-    setInput({
-      ...input,
-      [username]: pwd
-    });
-  };
-
-  /* Validation */
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    /* Blank Fields */
-    if (!input.username.length) {
-      setUserErr("User Name field is empty");
-    } else {
-      setUserErr("");
-    }
-    if (!input.pwd.length) {
-      setPwdErr("Password field is empty");
-    } else {
-      setPwdErr("");
-    }
-
-    /* Cred validation */
-
-    if (input.username.length > 0 && input.username !== uname) {
-      setSubmit(false);
-      setUserErr("Invalid User Name");
-    }
-    if (input.pwd.length > 0 && input.pwd !== password) {
-      setSubmit(false);
-      setPwdErr("Password Incorrect");
-    }
-    if (input.username === uname && input.pwd === password) {
-      setSubmit(true);
-    }
-
-  };
-
-
+function App(props) {
+  const { name, count, Increment, asyncs, data } = props;
+  const url = "https://jsonplaceholder.typicode.com/comments?postId=1";
+  useEffect(() => {
+    asyncs(url);
+  }, []);
   return (
     <div className="App">
-      {submit ? (
-        <h1>Form Submitted Successfully</h1>
-      ) : (
-        <>
-          <h1 style={{ position: "relative", left: "40px" }}>
-            Form Validation
-          </h1>
-          <form onSubmit={handleSubmit}>
-            <label htmlFor="username">User Name</label> &nbsp;
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={input.username}
-              onChange={changeHandler}
-            />
-            <br />
-            {usernameErr && <p className="error">{usernameErr}</p>}
-            <br />
-            <label htmlFor="pwd">Password &nbsp;</label> &nbsp;
-            <input
-              type="text"
-              id="pwd"
-              name="pwd"
-              value={input.pwd}
-              onChange={changeHandler}
-            />
-            <br />
-            {pwdErr && <p className="error">{pwdErr}</p>}
-            <br />
-            <button
-              type="submit"
-              style={{ position: "relative", left: "40px" }}
-            >
-              Submit
-            </button>
-          </form>
-        </>
-      )}
+      <h1>Hello CodeSandbox</h1>
+      <h2>Start editing to see some magic happen! {name}</h2>
+      <h1>Count {count}</h1>
+      <button onClick={Increment}>Increment</button>
+      {data && data.map((el, index) => <p key={el.id}>{el.email}</p>)}
     </div>
   );
 }
+
+export default EnhancedComp(App);
