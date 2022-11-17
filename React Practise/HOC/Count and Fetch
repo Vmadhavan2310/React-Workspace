@@ -1,0 +1,34 @@
+import { useEffect } from "react";
+import EnhancedComp from "./EnhancedComp";
+import "./src/styles.css";
+
+function Count(props) {
+  const { Increment, count, showDisp, asyncs, data } = props;
+  const url = "https://jsonplaceholder.typicode.com/users";
+  useEffect(() => {
+    asyncs(url);
+  }, []);
+  return (
+    <div className="App">
+      <>
+        <h2>Count Values is {count}</h2>
+        <button onClick={Increment}>Increase</button>
+        <h2>Disp Values is {showDisp("hello")}</h2>
+        <h1>Disp Values is {showDisp("hello")}</h1>
+        {data && (
+          <ol className="App">
+            {data.map((el, index) => {
+              return (
+                <li key={el.id} className="App">
+                  {el.name}
+                </li>
+              );
+            })}
+          </ol>
+        )}
+      </>
+    </div>
+  );
+}
+
+export default EnhancedComp(Count);
