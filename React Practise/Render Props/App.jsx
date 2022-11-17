@@ -23,3 +23,31 @@ root.render(
     />
   </StrictMode>
 );
+
+
+/********App JS file *********/
+
+
+import { useState } from "react";
+import "./styles.css";
+
+export default function App(props) {
+  const [count, setCount] = useState(0);
+  const [value, setValue] = useState([]);
+
+  const Increment = () => {
+    setCount((c) => c + 1);
+  };
+
+  const fetchInput = (url) => {
+    fetch(url)
+      .then((res) => res.json())
+      .then((data) => setValue(data));
+  };
+  return (
+    <div className="App">
+      {props.render(count, Increment,value, fetchInput)}
+      
+    </div>
+  );
+}
