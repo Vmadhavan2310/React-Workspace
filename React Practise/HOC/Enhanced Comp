@@ -1,0 +1,36 @@
+import { useState } from "react";
+
+const EnhancedComp = (OriginalComp) => {
+  function NewComp() {
+    const [count, setCount] = useState(0);
+    const [data, setData] = useState([]);
+
+    const Increment = () => {
+      setCount((c) => c + 1);
+    };
+
+    const showDisp = (value) => {
+      return value;
+    };
+    /* fetch */
+    function asyncs(url) {
+      fetch(url)
+        .then((res) => res.json())
+        .then((value) => setData(value.map((el) => el)));
+    }
+
+    return (
+      <OriginalComp
+        name="vinoth"
+        count={count}
+        Increment={Increment}
+        showDisp={showDisp}
+        asyncs={asyncs}
+        data={data}
+      />
+    );
+  }
+  return NewComp;
+};
+
+export default EnhancedComp;
