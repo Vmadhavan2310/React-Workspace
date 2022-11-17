@@ -1,0 +1,20 @@
+import { useEffect, useState } from "react";
+
+export default function useCount() {
+  
+    const [count, setCount] = useState(0);
+    const [value,setValue]=useState([])
+    const Increment = () => {
+      setCount((c) => c + 1);
+
+  }
+
+  /* fetch */
+
+  const fetchInput=(url)=>{
+    fetch(url)
+    .then(res=>res.json()).then(data=>setValue(data))
+  }
+
+  return {count,Increment,fetchInput,value};
+}
