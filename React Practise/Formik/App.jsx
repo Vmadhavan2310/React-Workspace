@@ -1,103 +1,86 @@
-import { useState } from "react";
-import "./style.css";
-
+import { useFormik } from "formik";
+import "./styles.css";
+import * as yup from "yup";
 export default function App() {
-  const [input, setInput] = useState({
-    username: "",
-    pwd: ""
+  const initialValues = {
+    fname: "",
+    lname: "",
+    mail: ""
+  };
+
+  const onSubmit = (values) => {
+    console.log("form data", values);
+  };
+
+  const validate = (values) => {
+    let err = {};
+    if (!values.fname) {
+      err.fname = "Required";
+    }
+    if (!values.lname) {
+      err.lname = "Required";
+    }
+    if (!values.mail) {
+      err.mail = "Required";
+    }
+    return err;
+  };
+
+  const validationSchema = yup.object({
+    fname: yup.string().required("Required").length(4, "Length must be 4"),
+    lname: yup.string().required("Required"),
+    mail: yup.string().required("Required").email("Invalid Format")
   });
-  const [usernameErr, setUserErr] = useState("");
-  const [pwdErr, setPwdErr] = useState("");
-  const [submit, setSubmit] = useState(false);
-  /* Credentials */
-
-  const uname = "VinothM2310";
-  const password = "Madhavan";
-  /* Controlled Cmp */
-
-  const changeHandler = (e) => {
-    const username = e.target.name;
-    const pwd = e.target.value;
-    setInput({
-      ...input,
-      [username]: pwd
-    });
-  };
-
-  /* Validation */
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    /* Blank Fields */
-    if (!input.username.length) {
-      setUserErr("User Name field is empty");
-    } else {
-      setUserErr("");
-    }
-    if (!input.pwd.length) {
-      setPwdErr("Password field is empty");
-    } else {
-      setPwdErr("");
-    }
-
-    /* Cred validation */
-
-    if (input.username.length > 0 && input.username !== uname) {
-      setSubmit(false);
-      setUserErr("Invalid User Name");
-    }
-    if (input.pwd.length > 0 && input.pwd !== password) {
-      setSubmit(false);
-      setPwdErr("Password Incorrect");
-    }
-    if (input.username === uname && input.pwd === password) {
-      setSubmit(true);
-    }
-
-  };
-
+  const formik = useFormik({
+    initialValues,
+    onSubmit,
+    validationSchema
+  });
 
   return (
     <div className="App">
-      {submit ? (
-        <h1>Form Submitted Successfully</h1>
-      ) : (
-        <>
-          <h1 style={{ position: "relative", left: "40px" }}>
-            Form Validation
-          </h1>
-          <form onSubmit={handleSubmit}>
-            <label htmlFor="username">User Name</label> &nbsp;
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={input.username}
-              onChange={changeHandler}
-            />
-            <br />
-            {usernameErr && <p className="error">{usernameErr}</p>}
-            <br />
-            <label htmlFor="pwd">Password &nbsp;</label> &nbsp;
-            <input
-              type="text"
-              id="pwd"
-              name="pwd"
-              value={input.pwd}
-              onChange={changeHandler}
-            />
-            <br />
-            {pwdErr && <p className="error">{pwdErr}</p>}
-            <br />
-            <button
-              type="submit"
-              style={{ position: "relative", left: "40px" }}
-            >
-              Submit
-            </button>
-          </form>
-        </>
-      )}
+      <form onSubmit={formik.handleSubmit} className="App">
+        <h1>Hello CodeSandbox</h1>
+        <h2>Start editing to see some magic happen!</h2>
+        <label htmlFor="fname">First Name</label> &nbsp;
+        <input
+          type="text"
+          name="fname"
+          onChange={formik.handleChange}
+          value={formik.values.fname}
+        />
+        <br />
+        {formik.errors.fname && (
+          <div className="err">{formik.errors.fname}</div>
+        )}
+        <br />
+        <label htmlFor="lname">Last Name</label> &nbsp;
+        <input
+          type="text"
+          name="lname"
+          onChange={formik.handleChange}
+          value={formik.values.lname}
+        />
+        <br />
+        {formik.errors.lname && (
+          <div className="err">{formik.errors.lname}</div>
+        )}
+        <br />
+        <label htmlFor="mail">Email ID</label> &nbsp;
+        <input
+          type="text"
+          name="mail"
+          onChange={formik.handleChange}
+          value={formik.values.mail}
+          style={{ position: "relative", left: "10px" }}
+        />
+        <br />
+        {formik.errors.mail && <div className="err">{formik.errors.mail}</div>}
+        <br />
+        <button style={{ position: "relative", left: "40px" }} type="submit">
+          Submit
+        </button>
+      </form>
     </div>
   );
 }
